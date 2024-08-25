@@ -32,6 +32,11 @@ $ forge test
  - running test against the sepolia node. by setting alchemy url to .env
  - `forge test --mt testPriceFeedVersionIsAccurate -vvv --fork-url $SEPOLIA_RPC_URL`
 
+### Test coverage.
+
+```shell
+  forge coverage -vvv --fork-url $SEPOLIA_RPC_URL
+```
 
 ### Format
 
