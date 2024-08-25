@@ -15,6 +15,8 @@ https://book.getfoundry.sh/
 
 ## Usage
 
+ - Forge is command line to use to `build`, `test` and `deploy` your smart contracts.
+
 ### Build
 
 ```shell
