@@ -15,6 +15,7 @@ contract HelperConfig is Script {
   // otherwise grab the existings address from live chain.
   
   NetworkConfig public activeConfig;
+  
   uint8 public constant DECIMAL = 8;
   int256 public constant INITIAL_PRICE = 2000e8;
   
@@ -29,7 +30,7 @@ contract HelperConfig is Script {
     } else if (block.chainid == 1) {
       activeConfig = getMainnetEthConfig();
     } else {
-      activeConfig = getAnvilEthConfig();
+      activeConfig = getOrCreateAnvilEthConfig();
     }
   }
   
@@ -47,7 +48,13 @@ contract HelperConfig is Script {
     return ethConfig;
   }
   
-  function getAnvilEthConfig() public returns(NetworkConfig memory) {
+  function getOrCreateAnvilEthConfig() public returns(NetworkConfig memory) {
+    
+    // To avoid the duplication of price feed.abi
+    if(activeConfig.priceFeed != address(0)) {
+      return activeConfig;
+    }
+    
     // price feed contract mock.
     // 1- deploy the mock
     // 2. return the mock address.
