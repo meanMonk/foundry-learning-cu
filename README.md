@@ -38,6 +38,8 @@ $ forge test
   forge coverage -vvv --fork-url $SEPOLIA_RPC_URL
 ```
 
+- to run against the mainnet: `forge test -vvv -f $MAINNET_RPC_URL`
+
 ### Format
 
 ```shell
