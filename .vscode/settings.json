@@ -1,0 +1,13 @@
+{
+  "solidity.defaultCompiler": "localNodeModule",
+  "jest.runMode": {
+    "type": "on-demand",
+    "coverage": false
+  },
+  "jest.outputConfig": {
+    "revealOn": "demand",
+    "revealWithFocus": "test-results",
+    "clearOnRun": "terminal",
+  },
+  "testing.openTesting": "neverOpen"
+}
