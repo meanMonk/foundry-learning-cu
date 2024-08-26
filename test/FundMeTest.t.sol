@@ -13,6 +13,7 @@ contract FundMeTest is Test {
   uint256 constant SEND_VALUE= 0.1 ether;
   uint256 constant STARTING_BALANCE = 10 ether; 
   
+  // setup gets run on each unit tests.
   function setUp() external {
     DeployFundMe deployFundMe = new DeployFundMe();
     fundMe = deployFundMe.run();
@@ -52,4 +53,26 @@ contract FundMeTest is Test {
     
     assertEq(amountFunded, SEND_VALUE);
   }
+  
+  
+  function testAddsFunderToArrayOfFunders() public {
+    vm.prank(ALICE);
+    
+    fundMe.fund{value: SEND_VALUE}();
+    
+    address funder = fundMe.getFunderAtIndex(0);
+    
+    assertEq(ALICE, funder);
+  }
+  
+  function testOnlyOnwerCanWithdraw() public {
+    vm.prank(ALICE);
+    fundMe.fund{value: SEND_VALUE}();
+    
+    vm.expectRevert();
+    vm.prank(ALICE); // user is not the owner of contract.
+    
+    fundMe.withdraw(); 
+  }
+  
 }
