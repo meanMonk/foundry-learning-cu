@@ -54,21 +54,21 @@ contract FundMeTest is Test {
     assertEq(amountFunded, SEND_VALUE);
   }
   
-  
-  function testAddsFunderToArrayOfFunders() public {
+  // prepare modifier for duplicated code 
+  // can use modifier to fund in any test we want
+  // solidity best practices
+  modifier funded {
     vm.prank(ALICE);
-    
     fundMe.fund{value: SEND_VALUE}();
-    
+    _;
+  }
+  
+  function testAddsFunderToArrayOfFunders() public funded {
     address funder = fundMe.getFunderAtIndex(0);
-    
     assertEq(ALICE, funder);
   }
   
-  function testOnlyOnwerCanWithdraw() public {
-    vm.prank(ALICE);
-    fundMe.fund{value: SEND_VALUE}();
-    
+  function testOnlyOnwerCanWithdraw() public funded {
     vm.expectRevert();
     vm.prank(ALICE); // user is not the owner of contract.
     
