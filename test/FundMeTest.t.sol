@@ -25,7 +25,7 @@ contract FundMeTest is Test {
   }
   
   function testOwnerIsMsgOwner() public view {
-    assertEq(fundMe.i_owner(), msg.sender);
+    assertEq(fundMe.getOwner(), msg.sender);
   }
   
   // This will fail as we have hardcoded contract address for sepolia.
@@ -74,5 +74,29 @@ contract FundMeTest is Test {
     
     fundMe.withdraw(); 
   }
+  
+  
+  function testWithdrawWithASingleFunder() public funded {
+    // Arrange
+    // balance of owner
+    uint256 startingOwnerBalance = fundMe.getOwner().balance;
+    uint256 startingFundMeBalance = address(fundMe).balance;
+    
+    // Act
+    vm.prank(fundMe.getOwner());
+    fundMe.withdraw();
+    
+    // assert
+    uint256 endingOwnerBalance = fundMe.getOwner().balance;
+    uint256 endingFundMeBalance = address(fundMe).balance;
+    
+    assertEq(endingFundMeBalance, 0);
+    
+    assertEq(startingFundMeBalance + startingOwnerBalance, endingOwnerBalance);
+    
+  }
+  
+  
+  
   
 }
