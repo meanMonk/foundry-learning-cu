@@ -9,9 +9,14 @@ import {DeployFundMe} from '../script/DeployFundMe.s.sol';
 contract FundMeTest is Test {
   FundMe fundMe;
   
+  address ALICE = makeAddr("alice");
+  uint256 constant SEND_VALUE= 0.1 ether;
+  uint256 constant STARTING_BALANCE = 10 ether; 
+  
   function setUp() external {
     DeployFundMe deployFundMe = new DeployFundMe();
     fundMe = deployFundMe.run();
+    vm.deal(ALICE, STARTING_BALANCE);
   } 
   
   function testMinimumDollarIsFive() public view {
@@ -34,6 +39,17 @@ contract FundMeTest is Test {
     assertEq(version, 4);
   }
   
-  // Modular deployments
-  // Modular tests
+  function testFundFailsWithoutEnoughETH() public {
+    vm.expectRevert();
+    fundMe.fund();
+  }
+  
+  function testFundUpdatesFundedDataStructure() public {
+    vm.prank(ALICE); // next trx will be send by user ALICE
+    
+    fundMe.fund{value: SEND_VALUE}();
+    uint256 amountFunded = fundMe.getAddressToAmountFunded(ALICE);
+    
+    assertEq(amountFunded, SEND_VALUE);
+  }
 }
